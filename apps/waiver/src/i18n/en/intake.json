@@ -1,0 +1,20 @@
+{
+  "welcome": "Welcome! Tap the button to sign up 🏁",
+  "register-button": "🏁 Register",
+  "greeting": "Hi {name}! Let's get you on the track 🏁",
+  "ask-self": "Tap to share your number, or just type your details — name, phone or email, and birthday. You can send them all in one message.",
+  "share-phone": "📱 Share my number",
+  "ask-name": "What's the name?",
+  "ask-contact": "A phone or email to reach them? Share a contact or type it.",
+  "ask-birthday": "Birthday? (DD.MM.YYYY)",
+  "add-another": "Who's next? Attach their contact 📎 or type their details.",
+  "added": "✅ {name} — added ({count} total).",
+  "menu-add-another": "➕ Add another",
+  "menu-done": "✔️ Done",
+  "menu-cancel": "✖️ Cancel",
+  "menu-hint": "Use a button below 👇",
+  "summary-title": "Registered {count}:",
+  "summary-line": "{index}. {name} — {contact}, {birthday}",
+  "done": "All set 🏁 See you at the track!",
+  "cancelled": "Cancelled. Send /start to start over."
+}
