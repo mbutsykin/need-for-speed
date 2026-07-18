@@ -5,8 +5,6 @@ import { I18nModule } from "nestjs-i18n";
 import { TelegrafModule } from "nestjs-telegraf";
 import { session } from "telegraf";
 
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { BotUpdate } from "./bot/bot.update";
 import { IntakeScene } from "./intake/intake.scene";
 
@@ -31,11 +29,9 @@ import { IntakeScene } from "./intake/intake.scene";
       useFactory: (config: ConfigService) => ({
         token: config.getOrThrow<string>("TELEGRAM_BOT_TOKEN"),
         middlewares: [session()],
-        launchOptions: config.get("NODE_ENV") === "test" ? false : undefined,
       }),
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService, BotUpdate, IntakeScene],
+  providers: [BotUpdate, IntakeScene],
 })
 export class AppModule {}
