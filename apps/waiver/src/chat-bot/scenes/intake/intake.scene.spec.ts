@@ -4,7 +4,7 @@ import type { I18nService } from "nestjs-i18n";
 import type { Scenes } from "telegraf";
 
 import { IntakeScene } from "./intake.scene";
-import type { IntakeState, Participant } from "./intake.types";
+import type { IntakeState, Participant } from "./types";
 
 // Mock i18n: return the key, so reply-keyboard button comparisons are
 // deterministic (e.g. this.i18n.t("intake.menu-done") === "intake.menu-done").

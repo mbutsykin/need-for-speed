@@ -3,15 +3,17 @@ import { I18nService } from "nestjs-i18n";
 import { Ctx, Message, On, Scene, SceneEnter } from "nestjs-telegraf";
 import { Markup, Scenes } from "telegraf";
 
-import { CANCEL_COMMAND, INTAKE_SCENE_ID } from "./intake.constants";
-import type { IntakeState, MissingField } from "./intake.types";
+import { EScene } from "../constants";
+
+import { CANCEL_COMMAND } from "./constants";
 import { isMinor, nextMissingField } from "./participant";
+import type { IntakeState, MissingField } from "./types";
 import { parseParticipantFields } from "./validators";
 
 type Ctx = Scenes.SceneContext;
 
 @Injectable()
-@Scene(INTAKE_SCENE_ID)
+@Scene(EScene.intake)
 export class IntakeScene {
   private readonly logger = new Logger(IntakeScene.name);
 

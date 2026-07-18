@@ -2,13 +2,13 @@ import { I18nService } from "nestjs-i18n";
 import { Ctx, Help, Message, On, Start, Update } from "nestjs-telegraf";
 import { Markup, Scenes } from "telegraf";
 
-import { INTAKE_SCENE_ID } from "../intake/intake.constants";
+import { EScene } from "./scenes";
 
 type Ctx = Scenes.SceneContext;
 
 /** Entry point: a Register button that launches the intake scene. */
 @Update()
-export class BotUpdate {
+export class ChatBotService {
   constructor(private readonly i18n: I18nService) {}
 
   @Start()
@@ -29,7 +29,7 @@ export class BotUpdate {
     const lang = ctx.from?.language_code;
 
     if (text.trim() === this.i18n.t("intake.register-button", { lang })) {
-      await ctx.scene.enter(INTAKE_SCENE_ID);
+      await ctx.scene.enter(EScene.intake);
 
       return;
     }

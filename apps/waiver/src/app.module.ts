@@ -5,8 +5,7 @@ import { I18nModule } from "nestjs-i18n";
 import { TelegrafModule } from "nestjs-telegraf";
 import { session } from "telegraf";
 
-import { BotUpdate } from "./bot/bot.update";
-import { IntakeScene } from "./intake/intake.scene";
+import { ChatBotModule } from "./chat-bot/chat-bot.module";
 
 @Module({
   imports: [
@@ -31,7 +30,7 @@ import { IntakeScene } from "./intake/intake.scene";
         middlewares: [session()],
       }),
     }),
+    ChatBotModule,
   ],
-  providers: [BotUpdate, IntakeScene],
 })
 export class AppModule {}
