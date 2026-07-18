@@ -6,8 +6,8 @@ import { Markup, Scenes } from "telegraf";
 import { EScene } from "../constants";
 
 import { CANCEL_COMMAND } from "./constants";
-import type { IntakeState, MissingField } from "./types";
 import { isMinor, nextMissingField } from "./participant";
+import type { IntakeState, MissingField } from "./types";
 import { parseParticipantFields } from "./validators";
 
 type Ctx = Scenes.SceneContext;
