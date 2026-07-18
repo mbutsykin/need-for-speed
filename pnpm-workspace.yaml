@@ -1,0 +1,14 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+allowBuilds:
+  unrs-resolver: true
+
+# Shared dependency versions. Reference with "catalog:" in any package.json.
+# https://pnpm.io/catalogs
+catalog:
+  "@types/node": ^26.1.1
+  eslint: ^10.7.0
+  prettier: ^3.9.5
+  typescript: ^7.0.2
