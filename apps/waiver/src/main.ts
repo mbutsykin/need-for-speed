@@ -1,11 +1,15 @@
+import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
 import { AppModule } from "./app.module";
 
+// The waiver bot is a standalone long-polling service — no HTTP server.
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.createApplicationContext(AppModule);
 
-  await app.listen(process.env.PORT ?? 3000);
+  app.enableShutdownHooks();
+
+  new Logger("Bootstrap").log("Waiver bot is running");
 }
 
 void bootstrap();
