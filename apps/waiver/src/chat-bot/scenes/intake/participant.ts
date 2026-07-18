@@ -1,4 +1,4 @@
-import type { MissingField, Participant } from "./intake.types";
+import type { MissingField, Participant } from "./types";
 
 /** Below this age a participant is a minor: the leader must vouch for them. */
 export const MINOR_AGE = 18;

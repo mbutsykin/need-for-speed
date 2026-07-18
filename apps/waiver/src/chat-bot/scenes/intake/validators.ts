@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Participant } from "./intake.types";
+import type { Participant } from "./types";
 
 const MAX_AGE_YEARS = 120;
 const emailSchema = z.string().email().max(254);
