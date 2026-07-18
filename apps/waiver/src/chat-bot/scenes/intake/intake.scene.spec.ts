@@ -3,12 +3,19 @@ import "reflect-metadata";
 import type { I18nService } from "nestjs-i18n";
 import type { Scenes } from "telegraf";
 
+import type { CustomersService } from "../../../customers";
+
 import { IntakeScene } from "./intake.scene";
 import type { IntakeState, Participant } from "./types";
 
 // Mock i18n: return the key, so reply-keyboard button comparisons are
 // deterministic (e.g. this.i18n.t("intake.menu-done") === "intake.menu-done").
 const i18n = { t: (key: string) => key } as unknown as I18nService;
+
+// Persistence is exercised in registration.spec.ts; here it's a no-op stub.
+const customers = {
+  registerGroup: jest.fn().mockResolvedValue(undefined),
+} as unknown as CustomersService;
 
 const ADULT: Participant = { name: "Adult", phone: "+1", birthday: "1990-01-01" };
 
@@ -38,7 +45,8 @@ describe("IntakeScene", () => {
   let scene: IntakeScene;
 
   beforeEach(() => {
-    scene = new IntakeScene(i18n);
+    jest.clearAllMocks();
+    scene = new IntakeScene(i18n, customers);
   });
 
   it("shows terms on entry and shadow-gathers the username", async () => {
@@ -97,6 +105,18 @@ describe("IntakeScene", () => {
     await scene.onText(asCtx(ctx), "intake.consent-no");
     expect(ctx.scene.state.participants[0].consent).toBe(false);
     expect(ctx.scene.leave).toHaveBeenCalledTimes(1);
+  });
+
+  it("persists the group once the leader answers consent", async () => {
+    const ctx = makeCtx({ participants: [{ ...ADULT }], stage: "menu" });
+
+    await scene.onText(asCtx(ctx), "intake.menu-done");
+    await scene.onText(asCtx(ctx), "intake.consent-yes");
+
+    expect(customers.registerGroup).toHaveBeenCalledTimes(1);
+    expect(customers.registerGroup).toHaveBeenCalledWith([
+      expect.objectContaining({ name: "Adult", consent: true }),
+    ]);
   });
 
   it("blocks an under-18 party leader", async () => {

@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { I18nModule } from "nestjs-i18n";
 import { TelegrafModule } from "nestjs-telegraf";
 import { session } from "telegraf";
@@ -22,6 +23,15 @@ import { ChatBotModule } from "./chat-bot/chat-bot.module";
         path: join(__dirname, "i18n"),
         watch: false,
       },
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: "postgres",
+        url: config.getOrThrow<string>("DATABASE_URL"),
+        autoLoadEntities: true,
+        synchronize: false,
+      }),
     }),
     TelegrafModule.forRootAsync({
       inject: [ConfigService],

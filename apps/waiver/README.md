@@ -44,6 +44,33 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
+## Database
+
+Completed registrations are persisted to a Postgres `customers` table via
+TypeORM. Configure the connection with `DATABASE_URL` (copy `.env.example` to
+`.env`). Local development uses a `waiver` database in your Postgres container;
+production points the same variable at Neon.
+
+First-time local bootstrap:
+
+```bash
+# 1. Create the database (once)
+$ docker exec <postgres-container> psql -U <user> -d postgres -c "CREATE DATABASE waiver"
+
+# 2. Build, then apply migrations against DATABASE_URL
+$ pnpm run build
+$ pnpm run migration:run
+```
+
+Migrations live in `src/db/migrations/` (`<timestamp>-Name.ts`) and run against
+the compiled `dist/`:
+
+```bash
+$ pnpm run migration:run      # apply pending migrations
+$ pnpm run migration:revert   # roll back the last migration
+$ pnpm run migration:generate # scaffold a migration from entity changes
+```
+
 ## Run tests
 
 ```bash

@@ -16,14 +16,14 @@ about the bot's behavior stays the same; persistence is additive.
 
 ## Decisions
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| DB toolkit | **TypeORM** (`@nestjs/typeorm`) | Matches the sibling `nfs` repo (same `<timestamp>-Name.ts` migration convention + CLI); NestJS-native. |
-| Local database | **Reuse the running `nfs-postgres-1` container** with a dedicated `waiver` database | Uses docker already running locally; no second Postgres. Only a `CREATE DATABASE waiver` — does not touch the sibling repo's files. |
-| Production database | **Neon** | Same `DATABASE_URL` env var; no code difference from local. |
-| Record shape | **Flat `customers` table, one row per person** | Simpler than a normalized registrations+participants split; fits the KISS bar. |
-| Repeat visits | **Append-only, duplicates allowed** | No dedup/upsert now. If duplicates become a problem, a later migration can collapse them. |
-| Marketing consent | **Leader answers once; copied to every participant** | The intake asks consent once on the leader (waiver item 5). The whole group inherits that answer. |
+| Decision            | Choice                                                                              | Rationale                                                                                                                           |
+| ------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| DB toolkit          | **TypeORM** (`@nestjs/typeorm`)                                                     | Matches the sibling `nfs` repo (same `<timestamp>-Name.ts` migration convention + CLI); NestJS-native.                              |
+| Local database      | **Reuse the running `nfs-postgres-1` container** with a dedicated `waiver` database | Uses docker already running locally; no second Postgres. Only a `CREATE DATABASE waiver` — does not touch the sibling repo's files. |
+| Production database | **Neon**                                                                            | Same `DATABASE_URL` env var; no code difference from local.                                                                         |
+| Record shape        | **Flat `customers` table, one row per person**                                      | Simpler than a normalized registrations+participants split; fits the KISS bar.                                                      |
+| Repeat visits       | **Append-only, duplicates allowed**                                                 | No dedup/upsert now. If duplicates become a problem, a later migration can collapse them.                                           |
+| Marketing consent   | **Leader answers once; copied to every participant**                                | The intake asks consent once on the leader (waiver item 5). The whole group inherits that answer.                                   |
 
 ## Data model
 
