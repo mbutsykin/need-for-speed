@@ -16,17 +16,25 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "migration:run": "typeorm migration:run -d dist/db/datasource.js",
+    "migration:show": "typeorm migration:show -d dist/db/datasource.js",
+    "migration:generate": "typeorm migration:generate -d dist/db/datasource.js",
+    "migration:revert": "typeorm migration:revert -d dist/db/datasource.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/typeorm": "^11.0.0",
+    "dotenv": "^17.4.2",
     "nestjs-i18n": "^10.8.5",
     "nestjs-telegraf": "^2.9.1",
+    "pg": "^8.22.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "telegraf": "^4.16.3",
+    "typeorm": "^0.3.20",
     "zod": "^4.4.3"
   },
   "devDependencies": {

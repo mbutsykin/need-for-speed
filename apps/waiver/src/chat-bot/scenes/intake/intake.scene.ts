@@ -3,6 +3,7 @@ import { I18nService } from "nestjs-i18n";
 import { Ctx, Message, On, Scene, SceneEnter } from "nestjs-telegraf";
 import { Markup, Scenes } from "telegraf";
 
+import { CustomersService } from "../../../customers";
 import { EScene } from "../constants";
 
 import { CANCEL_COMMAND } from "./constants";
@@ -17,7 +18,10 @@ type Ctx = Scenes.SceneContext;
 export class IntakeScene {
   private readonly logger = new Logger(IntakeScene.name);
 
-  constructor(private readonly i18n: I18nService) {}
+  constructor(
+    private readonly i18n: I18nService,
+    private readonly customers: CustomersService,
+  ) {}
 
   @SceneEnter()
   async onEnter(@Ctx() ctx: Ctx): Promise<void> {
@@ -298,8 +302,16 @@ export class IntakeScene {
       return;
     }
 
-    // No DB yet — record the group so it's visible in the logs.
-    this.logger.log(`Registration: ${JSON.stringify(state.participants)}`);
+    // Persist the group. A write failure is logged but doesn't block the
+    // confirmation — the operator can recover the group from the logs.
+    try {
+      await this.customers.registerGroup(state.participants);
+    } catch (error) {
+      this.logger.error(
+        `Failed to persist registration: ${JSON.stringify(state.participants)}`,
+        error instanceof Error ? error.stack : String(error),
+      );
+    }
 
     const lines = state.participants.map((p, i) =>
       this.i18n.t("intake.summary-line", {
