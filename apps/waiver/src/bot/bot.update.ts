@@ -1,19 +1,50 @@
-import { Ctx, Help, Start, Update } from "nestjs-telegraf";
-import type { Context } from "telegraf";
+import { I18nService } from "nestjs-i18n";
+import { Ctx, Help, Message, On, Start, Update } from "nestjs-telegraf";
+import { Markup, Scenes } from "telegraf";
 
-/**
- * Root Telegram update handler. For now it just says hello — the customer
- * intake questionnaire will grow out of here.
- */
+import { INTAKE_SCENE_ID } from "../intake/intake.constants";
+
+type Ctx = Scenes.SceneContext;
+
+/** Entry point: a Register button that launches the intake scene. */
 @Update()
 export class BotUpdate {
+  constructor(private readonly i18n: I18nService) {}
+
   @Start()
-  async onStart(@Ctx() ctx: Context): Promise<void> {
-    await ctx.reply("Hello World 🏁 Welcome to the go-kart center bot!");
+  async onStart(@Ctx() ctx: Ctx): Promise<void> {
+    await this.showWelcome(ctx);
   }
 
   @Help()
-  async onHelp(@Ctx() ctx: Context): Promise<void> {
-    await ctx.reply("Send /start to say hello.");
+  async onHelp(@Ctx() ctx: Ctx): Promise<void> {
+    await this.showWelcome(ctx);
+  }
+
+  @On("text")
+  async onText(@Ctx() ctx: Ctx, @Message("text") text: string): Promise<void> {
+    // Commands are handled by their own decorators; ignore them here.
+    if (text.startsWith("/")) return;
+
+    const lang = ctx.from?.language_code;
+
+    if (text.trim() === this.i18n.t("intake.register-button", { lang })) {
+      await ctx.scene.enter(INTAKE_SCENE_ID);
+
+      return;
+    }
+
+    await this.showWelcome(ctx);
+  }
+
+  private async showWelcome(ctx: Ctx): Promise<void> {
+    const lang = ctx.from?.language_code;
+
+    await ctx.reply(
+      this.i18n.t("intake.welcome", { lang }),
+      Markup.keyboard([
+        [Markup.button.text(this.i18n.t("intake.register-button", { lang }))],
+      ]).resize(),
+    );
   }
 }
