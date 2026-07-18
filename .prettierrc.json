@@ -1,7 +1,17 @@
 {
-  "semi": true,
+  "printWidth": 100,
   "singleQuote": false,
   "trailingComma": "all",
-  "printWidth": 100,
-  "tabWidth": 2
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "<BUILTIN_MODULES>",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/(.*)$",
+    "",
+    "^\\.\\.(/.*)$",
+    "",
+    "^\\.(/.*)$"
+  ],
+  "importOrderParserPlugins": ["typescript", "decorators-legacy", "jsx"]
 }
